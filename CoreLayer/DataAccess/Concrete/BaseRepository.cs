@@ -1,9 +1,13 @@
 ﻿using CoreLayer.DataAccess.Abstract;
 using CoreLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoreLayer.DataAccess.Concrete
 {
+
     public class BaseRepository<T, TContext> : IBaseRepository<T>
         where T : BaseEntity, new()
         where TContext : DbContext, new()
@@ -48,12 +52,12 @@ namespace CoreLayer.DataAccess.Concrete
                 context.SaveChanges();
             }
         }
+
         public IEnumerable<T> GetActiveAll()
         {
             using (TContext context = new TContext())
             {
-
-                return context.Set<T>().Where(x => x.Delete == 0);
+                return context.Set<T>().Where(x => x.Delete == 0).ToList();
             }
         }
 
@@ -61,8 +65,7 @@ namespace CoreLayer.DataAccess.Concrete
         {
             using (TContext context = new TContext())
             {
-
-                return context.Set<T>();
+                return context.Set<T>().ToList();
             }
         }
 
@@ -70,10 +73,8 @@ namespace CoreLayer.DataAccess.Concrete
         {
             using (TContext context = new TContext())
             {
-
                 return context.Set<T>().FirstOrDefault(x => x.Id == id);
             }
         }
-
     }
 }
