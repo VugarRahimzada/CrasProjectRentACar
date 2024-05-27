@@ -1,13 +1,12 @@
 ﻿using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using BusinessLayer.Mapper;
+using BusinessLayer.Validation.FluentValidation;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Context;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using EntityLayer.Concrete.TableModels;
+using FluentValidation;
 
 namespace CrasProjectAPI
 {
@@ -26,6 +25,8 @@ namespace CrasProjectAPI
             builder.Services.AddScoped<IBlogDal, BlogDal>();
             builder.Services.AddScoped<ICommentService, CommentManager>();
             builder.Services.AddScoped<ICommentDal, CommentDal>();
+            builder.Services.AddScoped<IValidator<Blog>, BlogValidation>();
+            builder.Services.AddScoped<IValidator<Comment>, CommentValidation>();
     
 
             // Add Swagger for API documentation

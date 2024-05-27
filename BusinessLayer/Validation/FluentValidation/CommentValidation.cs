@@ -1,10 +1,11 @@
 ﻿using BusinessLayer.BaseMessage;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
+using EntityLayer.Concrete.TableModels;
 using FluentValidation;
 
 namespace BusinessLayer.Validation.FluentValidation
 {
-    public class CommentValidation : AbstractValidator<CommentCreateDto>
+    public class CommentValidation : AbstractValidator<Comment>
     {
         public CommentValidation()
         {

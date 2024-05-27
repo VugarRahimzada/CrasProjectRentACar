@@ -5,10 +5,17 @@ using CoreLayer.Extension;
 using CoreLayer.Results.Abstract;
 using CoreLayer.Results.Concrete.ErrorResult;
 using CoreLayer.Results.Concrete.SuccessResult;
+using CoreLayer.Validation;
 using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
 using EntityLayer.Concrete.TableModels;
+using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using System.Net;
+using IResult = CoreLayer.Results.Abstract.IResult;
 
 namespace BusinessLayer.Concrete
 {
@@ -16,18 +23,29 @@ namespace BusinessLayer.Concrete
     {
         private readonly IBlogDal _blogdal;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IValidator<Blog> _blogValidator;
 
-        public BlogManager(IBlogDal blogdal, IMapper mapper)
+        public BlogManager(IBlogDal blogdal, IMapper mapper, IWebHostEnvironment webHostEnvironment, IValidator<Blog> blogValidator)
         {
             _blogdal = blogdal;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
+            _blogValidator = blogValidator;
         }
 
-        public IResult Add(BlogCreateDto entity, string webRootPath)
+        public IResult Add(BlogCreateDto entity)
         {
-            var value = _mapper.Map<Blog>(entity);
-            value.PhotoPath = PictureHelper.UploadImage(entity.PhotoPath, webRootPath);
-            _blogdal.Add(value);
+            
+            var blog = _mapper.Map<Blog>(entity);
+            var validationResult = ValidationTool.Validate<Blog>(blog, _blogValidator);
+            if (validationResult != null)
+            {
+                return validationResult;
+            }
+
+            blog.PhotoPath = PictureHelper.UploadImage(entity.PhotoPath, _webHostEnvironment.WebRootPath);
+            _blogdal.Add(blog);
             return new SuccessResult(HttpStatusCode.Created, Messages.SUCCESFULLY_ADDED);
         }
 
@@ -51,15 +69,38 @@ namespace BusinessLayer.Concrete
             return new SuccessResult(HttpStatusCode.OK, Messages.PERMANENTLY_SUCCESFULLY_DELETED);
         }
 
+
+
         public IResult Update(BlogUpdateDto entity)
         {
-            var value = _mapper.Map<Blog>(entity);
-            if (entity == null)
+            var existingBlog = _blogdal.GetById(entity.Id);
+
+            if (existingBlog == null)
             {
                 return new ErrorResult(HttpStatusCode.NotFound, Messages.NOT_FOUND);
-
             }
-            _blogdal.Update(value);
+
+            var blog = _mapper.Map<Blog>(entity);
+
+            if (entity.PhotoPath != null)
+            {
+                blog.PhotoPath = PictureHelper.UploadImage(entity.PhotoPath, _webHostEnvironment.WebRootPath);
+            }
+            else
+            {
+                blog.PhotoPath = existingBlog.PhotoPath;
+            }
+            
+
+            var validationResult = ValidationTool.Validate(blog, _blogValidator);
+
+            if (validationResult != null)
+            {
+                return validationResult;
+            }
+
+
+            _blogdal.Update(blog);
             return new SuccessResult(HttpStatusCode.OK, Messages.SUCCESFULLY_UPDATE);
         }
 
@@ -67,7 +108,7 @@ namespace BusinessLayer.Concrete
         {
             var value = _blogdal.GetAll();
             var valuedto = _mapper.Map<List<BlogReadDto>>(value);
-            if (value == null)
+            if (valuedto == null && valuedto.Count == 0)
             {
                 return new ErrorDataResult<List<BlogReadDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
             }
@@ -76,13 +117,13 @@ namespace BusinessLayer.Concrete
 
         public IDataResult<List<BlogReadActivDto>> GetAllActive()
         {
-            var value = _blogdal.GetActiveAll();
+            var value = _blogdal.GetAllWithComments();
             var valuedto = _mapper.Map<List<BlogReadActivDto>>(value);
-            if (valuedto == null)
+            if (valuedto == null && valuedto.Count == 0 )
             {
                 return new ErrorDataResult<List<BlogReadActivDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
             }
-            return new SuccessDataResult<List<BlogReadActivDto>>(valuedto, HttpStatusCode.OK, "Data retrieved successfully");
+            return new SuccessDataResult<List<BlogReadActivDto>>(valuedto, HttpStatusCode.OK, Messages.DATA_SUCCESFULLY_RETRIEVED);
         }
 
         public IDataResult<BlogReadDto> GetById(int id)

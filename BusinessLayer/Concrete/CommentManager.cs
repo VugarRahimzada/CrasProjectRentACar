@@ -5,10 +5,12 @@ using BusinessLayer.Validation.FluentValidation;
 using CoreLayer.Results.Abstract;
 using CoreLayer.Results.Concrete.ErrorResult;
 using CoreLayer.Results.Concrete.SuccessResult;
+using CoreLayer.Validation;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.Concrete;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
 using EntityLayer.Concrete.TableModels;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using System.Net;
 
 namespace BusinessLayer.Concrete
@@ -18,12 +20,14 @@ namespace BusinessLayer.Concrete
         private readonly ICommentDal _commentDal;
         private readonly IBlogDal _blogDal;
         private readonly IMapper _mapper;
+        private readonly IValidator<Comment> _commentvalidator;
 
-        public CommentManager(ICommentDal commentDal, IMapper mapper, IBlogDal blogDal)
+        public CommentManager(ICommentDal commentDal, IBlogDal blogDal, IMapper mapper, IValidator<Comment> validator)
         {
             _commentDal = commentDal;
-            _mapper = mapper;
             _blogDal = blogDal;
+            _mapper = mapper;
+            _commentvalidator = validator;
         }
 
         public IResult Add(CommentCreateDto entity)
@@ -32,19 +36,18 @@ namespace BusinessLayer.Concrete
 
             var blog = _blogDal.GetActiveAll();
 
-            var validation = new CommentValidation();
-            var validationResult = validation.Validate(entity);
-            List<string>  test = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
-            if (!validationResult.IsValid)
+            var validationresult = ValidationTool.Validate(value, _commentvalidator);
+
+            if (validationresult != null)
             {
-                return new ErrorDataResult<List<string>>(test,HttpStatusCode.BadRequest);
+                return validationresult;
             }
 
             if (!blog.Any(x => x.Id == entity.BlogId))
             {
                 return new ErrorResult(HttpStatusCode.NotFound, Messages.NOT_FOUND);
             }
-         
+
             _commentDal.Add(value);
             _blogDal.IncreesCommentCounta(entity.BlogId);
 

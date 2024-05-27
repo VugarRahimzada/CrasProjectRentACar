@@ -6,7 +6,7 @@ namespace BusinessLayer.Abstract
 {
     public interface IBlogService 
     {
-        IResult Add(BlogCreateDto entity, string webRootPath);
+        IResult Add(BlogCreateDto entity);
         IResult Update(BlogUpdateDto entity);
         IResult Delete(int id);
         IResult HardDelete(int id);

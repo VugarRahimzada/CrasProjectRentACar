@@ -10,6 +10,6 @@ namespace EntityLayer.Concrete.DTOs.BlogDTOs
         public int CommentCounta { get; set; } = 0;
         public string PhotoPath { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
-        public List<CommentReadDto> Comments { get; set; }
+        public List<CommentReadActiveDto> Comments { get; set; }
     }
 }

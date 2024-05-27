@@ -39,12 +39,6 @@ namespace CrasProjectAPI.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CommentCreateDto comment)
         {
-            var validation = new CommentValidation();
-            var validationResult = validation.Validate(comment);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage).ToList());
-            }
             var result =  _commentService.Add(comment);
             return Ok(result);
         }

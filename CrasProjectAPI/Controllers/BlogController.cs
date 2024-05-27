@@ -9,12 +9,10 @@ namespace CrasProjectAPI.Controllers
     public class BlogController : ControllerBase
     {
         private readonly IBlogService _blogService;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public BlogController(IBlogService blogService, IWebHostEnvironment webHostEnvironment)
+        public BlogController(IBlogService blogService)
         {
             _blogService = blogService;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet("Active")]
@@ -34,13 +32,11 @@ namespace CrasProjectAPI.Controllers
         [HttpPost]
         public IActionResult Create([FromForm] BlogCreateDto blog)
         {
-            var result = _blogService.Add(blog,_webHostEnvironment.WebRootPath);
+            var result = _blogService.Add(blog);
             return Ok(result);
         }
-
-
         [HttpPut]
-        public IActionResult Update([FromBody] BlogUpdateDto blog)
+        public IActionResult Update([FromForm] BlogUpdateDto blog)
         {
 
             var result = _blogService.Update(blog);
