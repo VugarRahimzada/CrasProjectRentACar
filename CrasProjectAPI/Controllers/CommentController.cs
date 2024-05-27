@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using BusinessLayer.Validation.FluentValidation;
 using CoreLayer.Results.Concrete;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,21 @@ namespace CrasProjectAPI.Controllers
             var result = _commentService.GetAll();
             return Ok(result);
         }
+        [HttpGet("GetCommentByBlogId")]
+        public IActionResult GetCommentByBlogId(int id)
+        {
+            var result = _commentService.GetCommentsByBlogId(id);
+            return Ok(result);
+        }
         [HttpPost]
         public IActionResult Create([FromBody] CommentCreateDto comment)
         {
+            var validation = new CommentValidation();
+            var validationResult = validation.Validate(comment);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+            }
             var result =  _commentService.Add(comment);
             return Ok(result);
         }

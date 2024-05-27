@@ -1,13 +1,12 @@
 ﻿using CoreLayer.Results.Abstract;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
-using EntityLayer.Concrete.TableModels;
 
 
 namespace BusinessLayer.Abstract
 {
     public interface IBlogService 
     {
-        IResult Add(BlogCreateDto entity);
+        IResult Add(BlogCreateDto entity, string webRootPath);
         IResult Update(BlogUpdateDto entity);
         IResult Delete(int id);
         IResult HardDelete(int id);

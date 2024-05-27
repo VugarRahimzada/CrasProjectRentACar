@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstract;
 using BusinessLayer.BaseMessage;
+using CoreLayer.Extension;
 using CoreLayer.Results.Abstract;
 using CoreLayer.Results.Concrete.ErrorResult;
 using CoreLayer.Results.Concrete.SuccessResult;
@@ -22,9 +23,10 @@ namespace BusinessLayer.Concrete
             _mapper = mapper;
         }
 
-        public IResult Add(BlogCreateDto entity)
+        public IResult Add(BlogCreateDto entity, string webRootPath)
         {
             var value = _mapper.Map<Blog>(entity);
+            value.PhotoPath = PictureHelper.UploadImage(entity.PhotoPath, webRootPath);
             _blogdal.Add(value);
             return new SuccessResult(HttpStatusCode.Created, Messages.SUCCESFULLY_ADDED);
         }
@@ -65,7 +67,7 @@ namespace BusinessLayer.Concrete
         {
             var value = _blogdal.GetAll();
             var valuedto = _mapper.Map<List<BlogReadDto>>(value);
-            if (valuedto == null)
+            if (value == null)
             {
                 return new ErrorDataResult<List<BlogReadDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
             }
@@ -94,6 +96,13 @@ namespace BusinessLayer.Concrete
 
 
             return new SuccessDataResult<BlogReadDto>(valuedto, HttpStatusCode.OK, Messages.DATA_SUCCESFULLY_RETRIEVED);
+        }
+
+        public void CommentCouta(int id)
+        {
+            var value = _blogdal.GetById(id);
+
+            value.CommentCounta++;
         }
     }
 }

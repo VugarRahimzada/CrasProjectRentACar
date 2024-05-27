@@ -11,5 +11,6 @@ namespace BusinessLayer.Abstract
         IDataResult<List<CommentReadDto>> GetAll();
         IDataResult<List<CommentReadActiveDto>> GetAllActive();
         IDataResult<CommentReadDto> GetById(int id);
+        IDataResult<List<CommentReadActiveDto>> GetCommentsByBlogId(int id);
     }
 }

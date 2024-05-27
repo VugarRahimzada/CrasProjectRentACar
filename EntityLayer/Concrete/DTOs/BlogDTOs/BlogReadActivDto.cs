@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Concrete.DTOs.CommentDTOs;
+using EntityLayer.Concrete.TableModels;
 
 namespace EntityLayer.Concrete.DTOs.BlogDTOs
 {
