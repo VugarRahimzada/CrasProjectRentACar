@@ -23,8 +23,13 @@ namespace CrasProjectAPI
             // Register application services
             builder.Services.AddScoped<IBlogService, BlogManager>();
             builder.Services.AddScoped<IBlogDal, BlogDal>();
+
             builder.Services.AddScoped<ICommentService, CommentManager>();
             builder.Services.AddScoped<ICommentDal, CommentDal>();
+
+            builder.Services.AddScoped<ICarService, CarManager>();
+            builder.Services.AddScoped<ICarDal, CarDal>();
+
             builder.Services.AddScoped<IValidator<Blog>, BlogValidation>();
             builder.Services.AddScoped<IValidator<Comment>, CommentValidation>();
     

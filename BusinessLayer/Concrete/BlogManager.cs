@@ -36,7 +36,7 @@ namespace BusinessLayer.Concrete
 
         public IResult Add(BlogCreateDto entity)
         {
-            
+
             var blog = _mapper.Map<Blog>(entity);
             var validationResult = ValidationTool.Validate<Blog>(blog, _blogValidator);
             if (validationResult != null)
@@ -69,8 +69,6 @@ namespace BusinessLayer.Concrete
             return new SuccessResult(HttpStatusCode.OK, Messages.PERMANENTLY_SUCCESFULLY_DELETED);
         }
 
-
-
         public IResult Update(BlogUpdateDto entity)
         {
             var existingBlog = _blogdal.GetById(entity.Id);
@@ -90,7 +88,7 @@ namespace BusinessLayer.Concrete
             {
                 blog.PhotoPath = existingBlog.PhotoPath;
             }
-            
+
 
             var validationResult = ValidationTool.Validate(blog, _blogValidator);
 
@@ -108,7 +106,7 @@ namespace BusinessLayer.Concrete
         {
             var value = _blogdal.GetAll();
             var valuedto = _mapper.Map<List<BlogReadDto>>(value);
-            if (valuedto == null && valuedto.Count == 0)
+            if (valuedto == null || valuedto.Count == 0)
             {
                 return new ErrorDataResult<List<BlogReadDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
             }
@@ -119,7 +117,7 @@ namespace BusinessLayer.Concrete
         {
             var value = _blogdal.GetAllWithComments();
             var valuedto = _mapper.Map<List<BlogReadActivDto>>(value);
-            if (valuedto == null && valuedto.Count == 0 )
+            if (valuedto == null || valuedto.Count == 0)
             {
                 return new ErrorDataResult<List<BlogReadActivDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
             }

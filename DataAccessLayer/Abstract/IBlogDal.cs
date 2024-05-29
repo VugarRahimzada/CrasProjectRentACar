@@ -5,7 +5,7 @@ namespace DataAccessLayer.Abstract
 {
     public interface IBlogDal :IBaseRepository<Blog>
     {
-        void IncreesCommentCounta(int id);
+        void IncreaseCommentCount(int id);
         void DecreaseCommentCounta(int id);
         IEnumerable<Blog> GetAllWithComments();
     }

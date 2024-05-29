@@ -1,60 +1,59 @@
 ﻿using BusinessLayer.Abstract;
-using EntityLayer.Concrete.DTOs.BlogDTOs;
+using EntityLayer.Concrete.DTOs.CarDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrasProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BlogController : ControllerBase
+    public class CarController : ControllerBase
     {
-        private readonly IBlogService _blogService;
+        private readonly ICarService _carService;
 
-        public BlogController(IBlogService blogService)
+        public CarController(ICarService carService)
         {
-            _blogService = blogService;
+            _carService = carService;
         }
 
         [HttpGet("Active")]
         public IActionResult GetAllActive()
         {
-            var result = _blogService.GetAllActive();
+            var result = _carService.GetAllActive();
             return Ok(result);
         }
 
         [HttpGet("All")]
         public IActionResult GetAll()
         {
-            var result = _blogService.GetAll();
+            var result = _carService.GetAll();
             return Ok(result);
         }
 
         [HttpPost]
-        public IActionResult Create([FromForm] BlogCreateDto blog)
+        public IActionResult Create([FromForm] CarCreateDTO car)
         {
-            var result = _blogService.Add(blog);
+            var result = _carService.Add(car);
             return Ok(result);
         }
         [HttpPut]
-        public IActionResult Update([FromForm] BlogUpdateDto blog)
+        public IActionResult Update([FromForm] CarUpdateDto car)
         {
-            
-            var result = _blogService.Update(blog);
+
+            var result = _carService.Update(car);
             return Ok(result);
         }
 
         [HttpDelete]
         public IActionResult HardDelete(int id)
         {
-            var result = _blogService.HardDelete(id);
+            var result = _carService.HardDelete(id);
             return Ok(result);
         }
         [HttpPut("SoftDelete")]
         public IActionResult Delete(int ID)
         {
-            var result = _blogService.Delete(ID);
+            var result = _carService.Delete(ID);
             return Ok(result);
         }
-
     }
 }

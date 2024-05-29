@@ -3,6 +3,7 @@ using CoreLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace CoreLayer.DataAccess.Concrete
@@ -53,19 +54,26 @@ namespace CoreLayer.DataAccess.Concrete
             }
         }
 
-        public IEnumerable<T> GetActiveAll()
-        {
-            using (TContext context = new TContext())
-            {
-                return context.Set<T>().Where(x => x.Delete == 0).ToList();
-            }
-        }
+        //public IEnumerable<T> GetActiveAll()
+        //{
+        //    using (TContext context = new TContext())
+        //    {
+        //        return context.Set<T>().Where(x => x.Delete == 0).ToList();
+        //    }
+        //}
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null)
         {
             using (TContext context = new TContext())
             {
-                return context.Set<T>().ToList();
+                if (filter == null)
+                {
+                    return context.Set<T>().ToList();
+                }
+                else
+                {
+                    return context.Set<T>().Where(filter).ToList();
+                }
             }
         }
 

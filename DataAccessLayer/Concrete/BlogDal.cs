@@ -15,7 +15,7 @@ namespace DataAccessLayer.Concrete
             _appDbContext = appDbContext;
         }
 
-        public void IncreesCommentCounta(int id)
+        public void IncreaseCommentCount(int id)
         {
             _appDbContext.Blogs.Find(id).CommentCounta++;
 

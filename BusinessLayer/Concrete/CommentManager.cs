@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstract;
 using BusinessLayer.BaseMessage;
-using BusinessLayer.Validation.FluentValidation;
 using CoreLayer.Results.Abstract;
 using CoreLayer.Results.Concrete.ErrorResult;
 using CoreLayer.Results.Concrete.SuccessResult;
@@ -10,7 +9,6 @@ using DataAccessLayer.Abstract;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
 using EntityLayer.Concrete.TableModels;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using System.Net;
 
 namespace BusinessLayer.Concrete
@@ -34,7 +32,7 @@ namespace BusinessLayer.Concrete
         {
             var value = _mapper.Map<Comment>(entity);
 
-            var blog = _blogDal.GetActiveAll();
+            var blog = _blogDal.GetAll(x => x.Delete == 0);
 
             var validationresult = ValidationTool.Validate(value, _commentvalidator);
 
@@ -49,7 +47,7 @@ namespace BusinessLayer.Concrete
             }
 
             _commentDal.Add(value);
-            _blogDal.IncreesCommentCounta(entity.BlogId);
+            _blogDal.IncreaseCommentCount(entity.BlogId);
 
             return new SuccessResult(HttpStatusCode.Created, Messages.SUCCESFULLY_ADDED);
         }
@@ -60,7 +58,7 @@ namespace BusinessLayer.Concrete
             if (value == null)
                 return new ErrorResult(HttpStatusCode.NotFound, Messages.BLOG_NOT_FOUND);
             _commentDal.Delete(value);
-            _blogDal.IncreesCommentCounta(id);
+            _blogDal.DecreaseCommentCounta(id);
             return new SuccessResult(HttpStatusCode.OK, Messages.SUCCESFULLY_DELETED);
         }
 
@@ -70,20 +68,28 @@ namespace BusinessLayer.Concrete
             if (value == null)
                 return new ErrorResult(HttpStatusCode.NotFound, Messages.NOT_FOUND);
             _commentDal.HardDelete(value);
-            _blogDal.IncreesCommentCounta(id);
+            _blogDal.DecreaseCommentCounta(id);
             return new SuccessResult(HttpStatusCode.OK, Messages.PERMANENTLY_SUCCESFULLY_DELETED);
         }
         public IDataResult<List<CommentReadDto>> GetAll()
         {
             var value = _commentDal.GetAll();
             var valuedto = _mapper.Map<List<CommentReadDto>>(value);
+            if (valuedto == null || valuedto.Count == 0)
+            {
+                return new ErrorDataResult<List<CommentReadDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
+            }
             return new SuccessDataResult<List<CommentReadDto>>(valuedto, HttpStatusCode.OK, Messages.DATA_SUCCESFULLY_RETRIEVED);
         }
 
         public IDataResult<List<CommentReadActiveDto>> GetAllActive()
         {
-            var value = _commentDal.GetActiveAll();
+            var value = _commentDal.GetAll(x => x.Delete == 0);
             var valuedto = _mapper.Map<List<CommentReadActiveDto>>(value);
+            if (valuedto == null || valuedto.Count == 0)
+            {
+                return new ErrorDataResult<List<CommentReadActiveDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
+            }
             return new SuccessDataResult<List<CommentReadActiveDto>>(valuedto, HttpStatusCode.OK, Messages.DATA_SUCCESFULLY_RETRIEVED);
         }
 
@@ -101,7 +107,7 @@ namespace BusinessLayer.Concrete
             var valuedto = _mapper.Map<List<CommentReadActiveDto>>(value);
 
 
-            if (value == null)
+            if (value == null || valuedto.Count == 0)
                 return new ErrorDataResult<List<CommentReadActiveDto>>(valuedto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
 
 

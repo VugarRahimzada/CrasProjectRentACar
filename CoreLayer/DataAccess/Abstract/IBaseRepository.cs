@@ -1,4 +1,5 @@
 ﻿using CoreLayer.Entities;
+using System.Linq.Expressions;
 
 namespace CoreLayer.DataAccess.Abstract
 {
@@ -8,8 +9,8 @@ namespace CoreLayer.DataAccess.Abstract
         void Update(T entity);
         void Delete(T entity);
         void HardDelete(T entity);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> GetActiveAll();
+        IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null);
+        //IEnumerable<T> GetActiveAll();
         T GetById(int id);
     }
 }
