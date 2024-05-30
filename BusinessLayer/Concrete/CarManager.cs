@@ -84,7 +84,7 @@ namespace BusinessLayer.Concrete
 
         public IDataResult<List<CarReadDto>> GetAll()
         {
-            var car = _carDal.GetAll();
+            var car = _carDal.GetAllWithPart();
             var cardto = _mapper.Map<List<CarReadDto>>(car);
 
             if (cardto == null || cardto.Count == 0)
@@ -96,7 +96,7 @@ namespace BusinessLayer.Concrete
 
         public IDataResult<List<CarReadActivDto>> GetAllActive()
         {
-            var car = _carDal.GetAll(x=>x.Delete==0);
+            var car = _carDal.GetAllWithPart(x=>x.Delete==0);
             var cardto = _mapper.Map<List<CarReadActivDto>>(car);
 
             if (cardto == null || cardto.Count == 0)

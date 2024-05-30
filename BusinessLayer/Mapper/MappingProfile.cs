@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
+using EntityLayer.Concrete.DTOs.BodyDTOs;
+using EntityLayer.Concrete.DTOs.BrandDTOs;
 using EntityLayer.Concrete.DTOs.CarDTOs;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
+using EntityLayer.Concrete.DTOs.DoorDTOs;
+using EntityLayer.Concrete.DTOs.FuelDTOs;
+using EntityLayer.Concrete.DTOs.TransmissionDTOs;
 using EntityLayer.Concrete.TableModels;
 
 namespace BusinessLayer.Mapper
@@ -29,6 +34,40 @@ namespace BusinessLayer.Mapper
             CreateMap<CarReadDto , Car>().ReverseMap();
             CreateMap<CarUpdateDto , Car>().ReverseMap();
             #endregion
+
+            #region Brand
+            CreateMap<BrandCreateDto, Brand>().ReverseMap();
+            CreateMap<BrandReadDto, Brand>().ReverseMap();
+            CreateMap<BrandUpdateDto, Brand>().ReverseMap();
+            #endregion
+
+            #region Body
+            CreateMap<BodyCreateDto, Body>().ReverseMap();
+            CreateMap<BodyReadDto, Body>().ReverseMap();
+            CreateMap<BodyUpdateDto, Body>().ReverseMap();
+            #endregion
+
+            #region Door
+            CreateMap<DoorCreateDTO , Door>().ReverseMap();
+            CreateMap<DoorReadDto , Door>().ReverseMap();
+            CreateMap<DoorUpdateDto , Door>().ReverseMap();
+            #endregion
+
+            #region Fuel
+            CreateMap<FuelCreateDto , Fuel>().ReverseMap();
+            CreateMap<FuelReadDto , Fuel>().ReverseMap();
+            CreateMap<FuelUpdateDto , Fuel>().ReverseMap();
+            #endregion
+
+            #region Transmission
+            CreateMap<TransmissionCreateDto, Transmission>().ReverseMap();
+            CreateMap<TransmissionReadDto, Transmission>().ReverseMap();
+            CreateMap<TransmissionUpdateDto, Transmission>().ReverseMap();
+            #endregion
+
+
+
+
         }
     }
 }

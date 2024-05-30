@@ -1,4 +1,9 @@
-﻿using EntityLayer.Concrete.TableModels;
+﻿using EntityLayer.Concrete.DTOs.BodyDTOs;
+using EntityLayer.Concrete.DTOs.BrandDTOs;
+using EntityLayer.Concrete.DTOs.DoorDTOs;
+using EntityLayer.Concrete.DTOs.FuelDTOs;
+using EntityLayer.Concrete.DTOs.TransmissionDTOs;
+using EntityLayer.Concrete.TableModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +26,10 @@ namespace EntityLayer.Concrete.DTOs.CarDTOs
         public string PhotoPath { get; set; }
 
 
-        public int BrandId { get; set; }
-        public virtual Brand Brand { get; set; }
-        public int BodyId { get; set; }
-        public virtual Body Body { get; set; }
-        public int DoorId { get; set; }
-        public virtual Door Door { get; set; }
-        public int FuelId { get; set; }
-        public virtual Fuel Fuel { get; set; }
-        public int TransmissionId { get; set; }
-        public virtual Transmission Transmission { get; set; }
-
-        public int Delete { get; set; } = 0;
+        public  BrandReadDto Brand { get; set; }
+        public  BodyReadDto Body { get; set; }
+        public  DoorReadDto Door { get; set; }
+        public  FuelReadDto Fuel { get; set; }
+        public  TransmissionReadDto Transmission { get; set; }
     }
 }

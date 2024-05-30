@@ -16,6 +16,14 @@ namespace CrasProjectAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+        //    builder.Services.AddControllers()
+        //.AddJsonOptions(options =>
+        //{
+        //    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        //    options.JsonSerializerOptions.MaxDepth = 64;
+        //});
+
+
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -32,7 +40,7 @@ namespace CrasProjectAPI
 
             builder.Services.AddScoped<IValidator<Blog>, BlogValidation>();
             builder.Services.AddScoped<IValidator<Comment>, CommentValidation>();
-    
+
 
             // Add Swagger for API documentation
             builder.Services.AddEndpointsApiExplorer();
