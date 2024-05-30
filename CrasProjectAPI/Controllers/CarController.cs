@@ -31,7 +31,7 @@ namespace CrasProjectAPI.Controllers
 
         [HttpPost]
         public IActionResult Create([FromForm] CarCreateDTO car)
-        {
+        {    
             var result = _carService.Add(car);
             return Ok(result);
         }

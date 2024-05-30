@@ -28,5 +28,19 @@ namespace DataAccessLayer.Concrete
 
             return query.ToList();
         }
+
+        public bool Check(Car car)
+        {
+            bool body = _appDbContext.Bodys.Any(x => x.Id == car.Id);
+            bool brand = _appDbContext.Brands.Any(x => x.Id == car.Id);
+            bool door = _appDbContext.Doors.Any(x => x.Id == car.Id);
+            bool fuel = _appDbContext.Fuels.Any(x => x.Id == car.Id);
+            bool transmisson = _appDbContext.Transmissions.Any(x => x.Id == car.Id);
+            if (body && brand && door && fuel && transmisson)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

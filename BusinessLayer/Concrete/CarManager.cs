@@ -7,12 +7,12 @@ using CoreLayer.Results.Concrete.ErrorResult;
 using CoreLayer.Results.Concrete.SuccessResult;
 using CoreLayer.Validation;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.Concrete;
-using EntityLayer.Concrete.DTOs.BlogDTOs;
 using EntityLayer.Concrete.DTOs.CarDTOs;
 using EntityLayer.Concrete.TableModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using System.Net;
+using System.Reflection.Metadata;
 
 namespace BusinessLayer.Concrete
 {
@@ -21,17 +21,33 @@ namespace BusinessLayer.Concrete
         private readonly ICarDal _carDal;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IValidator<Car> _validator;
 
-        public CarManager(ICarDal carDal, IMapper mapper, IWebHostEnvironment webHostEnvironment)
+        public CarManager(ICarDal carDal, IMapper mapper, IWebHostEnvironment webHostEnvironment, IValidator<Car> validator)
         {
             _carDal = carDal;
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
+            _validator = validator;
         }
 
         public IResult Add(CarCreateDTO entity)
         {
+
+          
             var car = _mapper.Map<Car>(entity);
+
+            var validationResult = ValidationTool.Validate<Car>(car, _validator);
+            if (validationResult != null)
+            {
+                return validationResult;
+            }
+
+            if (!_carDal.Check(car))
+            {
+                return new ErrorResult(HttpStatusCode.NotFound, Messages.ID_NOT_VALID);
+            }
+
             car.PhotoPath = PictureHelper.UploadImage(entity.PhotoPath, _webHostEnvironment.WebRootPath);
             _carDal.Add(car);
             return new SuccessResult(HttpStatusCode.Created, Messages.SUCCESFULLY_ADDED);
@@ -67,6 +83,12 @@ namespace BusinessLayer.Concrete
             }
 
             var car = _mapper.Map<Car>(entity);
+
+            var validationResult = ValidationTool.Validate<Car>(car, _validator);
+            if (validationResult != null)
+            {
+                return validationResult;
+            }
 
             if (entity.PhotoPath != null)
             {

@@ -40,6 +40,8 @@ namespace CrasProjectAPI
 
             builder.Services.AddScoped<IValidator<Blog>, BlogValidation>();
             builder.Services.AddScoped<IValidator<Comment>, CommentValidation>();
+            builder.Services.AddScoped<IValidator<Car>, CarValidation>();
+        
 
 
             // Add Swagger for API documentation
