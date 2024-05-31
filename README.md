@@ -5,7 +5,6 @@
   <img src="https://img.icons8.com/ios/100/FFD700/under-construction.png" alt="Under Construction"/>
   <h2>Under Construction ...</h2>
 </div>
-**Under Construction ...**
 
 ## Project Overview
 
