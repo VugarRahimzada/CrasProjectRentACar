@@ -1,6 +1,6 @@
 # Cras RentACar
 
-![Under Construction](https://img.icons8.com/ios/50/000000/under-construction.png)  
+![Under Construction](https://img.icons8.com/ios/100/FFD700/under-construction.png)
 **Under Construction ...**
 
 ## Project Overview
