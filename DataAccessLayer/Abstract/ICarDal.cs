@@ -7,6 +7,6 @@ namespace DataAccessLayer.Abstract
     public interface ICarDal :IBaseRepository<Car>
     {
         IEnumerable<Car> GetAllWithPart(Expression<Func<Car,bool>>? filter = null);
-        bool Check(Car car);
+        bool PartIdChecker(Car car);
     }
 }

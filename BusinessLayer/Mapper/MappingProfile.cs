@@ -48,7 +48,7 @@ namespace BusinessLayer.Mapper
             #endregion
 
             #region Door
-            CreateMap<DoorCreateDTO , Door>().ReverseMap();
+            CreateMap<DoorCreateDto , Door>().ReverseMap();
             CreateMap<DoorReadDto , Door>().ReverseMap();
             CreateMap<DoorUpdateDto , Door>().ReverseMap();
             #endregion

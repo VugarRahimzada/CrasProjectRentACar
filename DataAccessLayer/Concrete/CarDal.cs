@@ -29,7 +29,7 @@ namespace DataAccessLayer.Concrete
             return query.ToList();
         }
 
-        public bool Check(Car car)
+        public bool PartIdChecker(Car car)
         {
             bool body = _appDbContext.Bodys.Any(x => x.Id == car.Id);
             bool brand = _appDbContext.Brands.Any(x => x.Id == car.Id);

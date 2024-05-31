@@ -1,13 +1,21 @@
 ﻿using EntityLayer.Concrete.TableModels;
+using EntityLayer.Concrete.TableModels.Membership;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace DataAccessLayer.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=VR; Database=CrasProjectDb; Integrated Security=True; Trusted_Connection=True;Encrypt=false;");
+            optionsBuilder.UseSqlServer(@"Server=VR; Database=CrasRentacACarDb; Integrated Security=True; Trusted_Connection=True;Encrypt=false;");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         public DbSet<Blog> Blogs { get; set; }

@@ -13,7 +13,7 @@ namespace BusinessLayer.Validation.FluentValidation
                  .WithMessage(Messages.GetRequiredMessage("Title"))
                  .MinimumLength(3)
                  .WithMessage(Messages.GetMinLengthMessage(3, "Title"))
-                 .MaximumLength(100)
+                 .MaximumLength(200)
                  .WithMessage(Messages.GetMaxLengthMessage(200, "Title"));
 
             RuleFor(x => x.Content)

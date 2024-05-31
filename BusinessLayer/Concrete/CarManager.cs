@@ -12,7 +12,6 @@ using EntityLayer.Concrete.TableModels;
 using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using System.Net;
-using System.Reflection.Metadata;
 
 namespace BusinessLayer.Concrete
 {
@@ -33,17 +32,15 @@ namespace BusinessLayer.Concrete
 
         public IResult Add(CarCreateDTO entity)
         {
-
-          
             var car = _mapper.Map<Car>(entity);
 
-            var validationResult = ValidationTool.Validate<Car>(car, _validator);
+            var validationResult = ValidationTool.Validate(car, _validator);
             if (validationResult != null)
             {
                 return validationResult;
             }
 
-            if (!_carDal.Check(car))
+            if (!_carDal.PartIdChecker(car))
             {
                 return new ErrorResult(HttpStatusCode.NotFound, Messages.ID_NOT_VALID);
             }
