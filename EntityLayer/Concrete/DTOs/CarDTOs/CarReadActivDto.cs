@@ -24,6 +24,7 @@ namespace EntityLayer.Concrete.DTOs.CarDTOs
         public string ExteriorColor { get; set; }
         public string InteriorColor { get; set; }
         public string PhotoPath { get; set; }
+        public bool IsRented { get; set; } = false;
 
 
         public  BrandReadDto Brand { get; set; }

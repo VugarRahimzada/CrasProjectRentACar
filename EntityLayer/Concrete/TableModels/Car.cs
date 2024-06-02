@@ -5,7 +5,10 @@ namespace EntityLayer.Concrete.TableModels
 {
     public partial class Car : BaseEntity
     {
-
+        public Car()
+        {
+            Bookings = new HashSet<Booking>();
+        }
         public string Name { get; set; }
         public byte Seat { get; set; }
         public short Luggage { get; set; }
@@ -16,6 +19,7 @@ namespace EntityLayer.Concrete.TableModels
         public string ExteriorColor { get; set; }
         public string InteriorColor { get; set; }
         public string PhotoPath { get; set; }
+        public bool IsRented { get; set; } = false;
 
 
         public int BrandId { get; set; }
@@ -29,6 +33,6 @@ namespace EntityLayer.Concrete.TableModels
         public int TransmissionId { get; set; }
         public virtual Transmission Transmission { get; set; }
 
-
+        public ICollection<Booking> Bookings { get; set; }
     }
 }

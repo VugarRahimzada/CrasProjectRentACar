@@ -11,6 +11,8 @@
         public static string BLOG_NOT_FOUND = "Blog Not Found";
         public static string EMAIL_NOT_VALID = "A valid email address is required.";
         public static string ID_NOT_VALID = "A valid ID  is required.";
+        public static string CAR_ALREADY_RENTED = "Car already rented!";
+        public static string DIDNT_HAVE_WAITING_CAR = "You dont have any Waiting car";
 
         public static string GetRequiredMessage(string propName)
         {

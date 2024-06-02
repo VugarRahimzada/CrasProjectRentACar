@@ -38,9 +38,21 @@ namespace DataAccessLayer.Concrete
             bool transmisson = _appDbContext.Transmissions.Any(x => x.Id == car.Id);
             if (body && brand && door && fuel && transmisson)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
+        }
+
+        public void CarRented(Car car)
+        {
+            var value = _appDbContext.Cars.FirstOrDefault(x => x.Id == car.Id);
+
+            if (value.IsRented == false)
+            {
+
+                value.IsRented = true;
+                _appDbContext.SaveChanges();
+            }
         }
     }
 }

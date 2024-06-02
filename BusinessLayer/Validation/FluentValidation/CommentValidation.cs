@@ -13,7 +13,7 @@ namespace BusinessLayer.Validation.FluentValidation
                 .NotEmpty()
                 .WithMessage(Messages.GetRequiredMessage("Name"))
                 .MinimumLength(3)
-                .WithMessage(Messages.GetMinLengthMessage(3,"Name"))
+                .WithMessage(Messages.GetMinLengthMessage(3, "Name"))
                 .MaximumLength(100)
                 .WithMessage(Messages.GetMaxLengthMessage(100, "Name"));
 

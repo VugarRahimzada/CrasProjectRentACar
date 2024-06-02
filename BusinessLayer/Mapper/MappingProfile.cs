@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
 using EntityLayer.Concrete.DTOs.BodyDTOs;
+using EntityLayer.Concrete.DTOs.BookingDTOs;
 using EntityLayer.Concrete.DTOs.BrandDTOs;
 using EntityLayer.Concrete.DTOs.CarDTOs;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
@@ -33,6 +34,7 @@ namespace BusinessLayer.Mapper
             CreateMap<CarReadActivDto , Car>().ReverseMap();
             CreateMap<CarReadDto , Car>().ReverseMap();
             CreateMap<CarUpdateDto , Car>().ReverseMap();
+            CreateMap<CarWaitingListDto , Car>().ReverseMap();
             #endregion
 
             #region Brand
@@ -65,7 +67,13 @@ namespace BusinessLayer.Mapper
             CreateMap<TransmissionUpdateDto, Transmission>().ReverseMap();
             #endregion
 
-
+            #region Booking
+            CreateMap<BookingCreateDto,Booking>().ReverseMap();
+            CreateMap<BookingReadDto,Booking>().ReverseMap();
+            CreateMap<BookingReadActiveDto,Booking>().ReverseMap();
+            CreateMap<BookingUpdateDto,Booking>().ReverseMap(); 
+            CreateMap<BookingConfirmationDto,Booking>().ReverseMap(); 
+            #endregion
 
 
         }

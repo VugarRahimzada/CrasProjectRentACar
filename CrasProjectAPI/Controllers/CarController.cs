@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete.DTOs.CarDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrasProjectAPI.Controllers
@@ -14,6 +15,8 @@ namespace CrasProjectAPI.Controllers
         {
             _carService = carService;
         }
+
+        [Authorize(Roles = "User")]
 
         [HttpGet("Active")]
         public IActionResult GetAllActive()

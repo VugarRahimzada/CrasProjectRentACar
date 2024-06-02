@@ -2,13 +2,18 @@
 using BusinessLayer.Concrete;
 using BusinessLayer.Mapper;
 using BusinessLayer.Validation.FluentValidation;
+using CoreLayer.Tools;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Context;
 using EntityLayer.Concrete.TableModels;
 using EntityLayer.Concrete.TableModels.Membership;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CrasProjectAPI
 {
@@ -18,27 +23,40 @@ namespace CrasProjectAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-        //    builder.Services.AddControllers()
-        //.AddJsonOptions(options =>
-        //{
-        //    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-        //    options.JsonSerializerOptions.MaxDepth = 64;
-        //});
-
-
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
-          
-            
-            
-            builder.Services.AddAuthentication();
-            builder.Services.AddAuthorization();
-
-
             builder.Services.AddDbContext<AppDbContext>()
-             .AddIdentity<ApplicationUser, ApplicationRole>()
-             .AddEntityFrameworkStores<AppDbContext>();
+                         .AddIdentity<ApplicationUser, ApplicationRole>()
+                         .AddEntityFrameworkStores<AppDbContext>()
+                         .AddDefaultTokenProviders();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(opt =>
+            {
+                opt.RequireHttpsMetadata = false;
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = JwtTokenDefaults.ValidIssuer,
+                    ValidAudience = JwtTokenDefaults.ValidAudience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtTokenDefaults.Key)),
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+            });
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -51,9 +69,7 @@ namespace CrasProjectAPI
                 options.User.RequireUniqueEmail = true;
             });
 
-
-
-
+            // Register services and validators
             builder.Services.AddScoped<IBlogService, BlogManager>();
             builder.Services.AddScoped<IBlogDal, BlogDal>();
 
@@ -78,6 +94,9 @@ namespace CrasProjectAPI
             builder.Services.AddScoped<ITransmissionService, TransmissionManager>();
             builder.Services.AddScoped<ITransmissionDal, TransmissionDal>();
 
+            builder.Services.AddScoped<IBookingService, BookingManager>();
+            builder.Services.AddScoped<IBookingDal, BookingDal>();
+
             builder.Services.AddScoped<IValidator<Blog>, BlogValidation>();
             builder.Services.AddScoped<IValidator<Comment>, CommentValidation>();
             builder.Services.AddScoped<IValidator<Car>, CarValidation>();
@@ -86,8 +105,7 @@ namespace CrasProjectAPI
             builder.Services.AddScoped<IValidator<Door>, DoorValidation>();
             builder.Services.AddScoped<IValidator<Fuel>, FuelValidation>();
             builder.Services.AddScoped<IValidator<Transmission>, TransmissionValidation>();
-        
-
+            builder.Services.AddScoped<IValidator<Booking>, BookingValidation>();
 
             // Add Swagger for API documentation
             builder.Services.AddEndpointsApiExplorer();
@@ -104,6 +122,7 @@ namespace CrasProjectAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

@@ -8,5 +8,6 @@ namespace DataAccessLayer.Abstract
     {
         IEnumerable<Car> GetAllWithPart(Expression<Func<Car,bool>>? filter = null);
         bool PartIdChecker(Car car);
+        public void CarRented(Car car);
     }
 }

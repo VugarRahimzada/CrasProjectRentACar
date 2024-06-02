@@ -26,6 +26,7 @@ namespace DataAccessLayer.Context
         public DbSet<Door> Doors { get; set; }
         public DbSet<Fuel> Fuels { get; set; }
         public DbSet<Transmission> Transmissions { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
 
     }
 }
