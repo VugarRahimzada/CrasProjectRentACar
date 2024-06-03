@@ -65,7 +65,7 @@ namespace BusinessLayer.Concrete
             if (value == null)
                 return new ErrorResult(HttpStatusCode.NotFound, Messages.NOT_FOUND);
 
-            _mapper.Map(entity, value);
+            
             _transmissionDal.Update(value);
             return new SuccessResult(HttpStatusCode.OK, Messages.SUCCESFULLY_UPDATE);
         }

@@ -1,13 +1,7 @@
-﻿using CoreLayer.Tools;
-using EntityLayer.Concrete.DTOs.MembershipDTOs;
-using EntityLayer.Concrete.TableModels.Membership;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+﻿using EntityLayer.Concrete.DTOs.MembershipDTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using CrasProjectAPI.Services;
+using EntityLayer.Concrete.TableModels.Membership;
 
 namespace CrasProjectAPI.Controllers
 {
@@ -15,15 +9,11 @@ namespace CrasProjectAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly AccountManager _accountManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
+        public AccountController(AccountManager accountManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
+            _accountManager = accountManager;
         }
 
         [HttpPost("login")]
@@ -34,40 +24,20 @@ namespace CrasProjectAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.FindByEmailAsync(login.Email);
+            var user = await _accountManager.FindUserByEmailAsync(login.Email);
             if (user == null)
             {
                 return BadRequest(new { message = "Email or Password not correct" });
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user, login.Password, false, false);
+            var result = await _accountManager.PasswordSignInAsync(user, login.Password);
             if (!result.Succeeded)
             {
                 return BadRequest(new { message = "Email or Password not correct" });
             }
 
-            var userRoles = await _userManager.GetRolesAsync(user);
-            var authClaims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-            authClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
-
-            var token = new JwtSecurityToken(
-                issuer: JwtTokenDefaults.ValidIssuer,
-                audience: JwtTokenDefaults.ValidAudience,
-                expires: DateTime.UtcNow.AddMinutes(30),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtTokenDefaults.Key)),
-                    SecurityAlgorithms.HmacSha256)
-            );
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.WriteToken(token);
-
-            return Ok(new { token = jwtToken });
+            var token = await _accountManager.CreateJwtTokenAsync(user);
+            return Ok(new { token });
         }
 
         [HttpPost("register")]
@@ -87,7 +57,7 @@ namespace CrasProjectAPI.Controllers
                 EmailConfirmed = true
             };
 
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            var result = await _accountManager.CreateUserAsync(user, registerDto.Password);
             if (result.Succeeded)
             {
                 return Ok(new { message = "Registration successful" });
@@ -104,28 +74,35 @@ namespace CrasProjectAPI.Controllers
         [HttpPost("add-role")]
         public async Task<IActionResult> AddRole([FromBody] string role)
         {
-            if (!await _roleManager.RoleExistsAsync(role))
+            if (!await _accountManager.RoleExistsAsync(role))
             {
-                var result = await _roleManager.CreateAsync(new ApplicationRole { Name = role });
+                var result = await _accountManager.CreateRoleAsync(role);
                 if (result.Succeeded)
                 {
                     return Ok(new { message = "Role added successfully" });
                 }
+
                 return BadRequest(new { message = "Failed to add role", errors = result.Errors });
             }
             return BadRequest(new { message = "Role already exists" });
         }
 
         [HttpPost("assign-role")]
-        public async Task<IActionResult> AssignRole([FromBody] ApplicationUserRole model)
+        public async Task<IActionResult> AssignRole([FromBody] UserRoleDto model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            var user = await _accountManager.FindUserByIdAsync(model.UserId);
             if (user == null)
             {
                 return BadRequest(new { message = "User not found" });
             }
 
-            var result = await _userManager.AddToRoleAsync(user, model.Role);
+            if (!await _accountManager.RoleExistsAsync(model.Role))
+            {
+                return BadRequest(new { message = "Role does not exist" });
+            }
+
+            var result = await _accountManager.AddToRoleAsync(user, model.Role);
             if (result.Succeeded)
             {
                 return Ok(new { message = "Role assigned successfully" });

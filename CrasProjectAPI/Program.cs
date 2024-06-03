@@ -3,6 +3,7 @@ using BusinessLayer.Concrete;
 using BusinessLayer.Mapper;
 using BusinessLayer.Validation.FluentValidation;
 using CoreLayer.Tools;
+using CrasProjectAPI.Services;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Context;
@@ -56,6 +57,7 @@ namespace CrasProjectAPI
             {
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
                 options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+                options.AddPolicy("AuthorPolicy", policy => policy.RequireRole("Author"));
             });
 
             builder.Services.Configure<IdentityOptions>(options =>
@@ -70,6 +72,7 @@ namespace CrasProjectAPI
             });
 
             // Register services and validators
+            builder.Services.AddScoped<AccountManager>();
             builder.Services.AddScoped<IBlogService, BlogManager>();
             builder.Services.AddScoped<IBlogDal, BlogDal>();
 
@@ -97,6 +100,12 @@ namespace CrasProjectAPI
             builder.Services.AddScoped<IBookingService, BookingManager>();
             builder.Services.AddScoped<IBookingDal, BookingDal>();
 
+            builder.Services.AddScoped<IAboutService, AboutManager>();
+            builder.Services.AddScoped<IAboutDal, AboutDal>();
+
+            builder.Services.AddScoped<ITestomonialService, TestomonialManager>();
+            builder.Services.AddScoped<ITestomonialDal, TestomonialDal>();
+
             builder.Services.AddScoped<IValidator<Blog>, BlogValidation>();
             builder.Services.AddScoped<IValidator<Comment>, CommentValidation>();
             builder.Services.AddScoped<IValidator<Car>, CarValidation>();
@@ -106,6 +115,8 @@ namespace CrasProjectAPI
             builder.Services.AddScoped<IValidator<Fuel>, FuelValidation>();
             builder.Services.AddScoped<IValidator<Transmission>, TransmissionValidation>();
             builder.Services.AddScoped<IValidator<Booking>, BookingValidation>();
+            builder.Services.AddScoped<IValidator<About>, AboutValidation>();
+            builder.Services.AddScoped<IValidator<Testomonial>, TestomonialValidation>();
 
             // Add Swagger for API documentation
             builder.Services.AddEndpointsApiExplorer();

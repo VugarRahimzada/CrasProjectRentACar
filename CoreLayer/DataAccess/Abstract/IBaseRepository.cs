@@ -10,7 +10,6 @@ namespace CoreLayer.DataAccess.Abstract
         void Delete(T entity);
         void HardDelete(T entity);
         IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null);
-        //IEnumerable<T> GetActiveAll();
         T GetById(int id);
     }
 }

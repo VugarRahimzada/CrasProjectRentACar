@@ -54,14 +54,6 @@ namespace CoreLayer.DataAccess.Concrete
             }
         }
 
-        //public IEnumerable<T> GetActiveAll()
-        //{
-        //    using (TContext context = new TContext())
-        //    {
-        //        return context.Set<T>().Where(x => x.Delete == 0).ToList();
-        //    }
-        //}
-
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null)
         {
             using (TContext context = new TContext())

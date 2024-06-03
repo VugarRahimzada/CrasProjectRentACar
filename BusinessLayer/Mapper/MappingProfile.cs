@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EntityLayer.Concrete.DTOs.AboutDTOs;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
 using EntityLayer.Concrete.DTOs.BodyDTOs;
 using EntityLayer.Concrete.DTOs.BookingDTOs;
@@ -7,6 +8,7 @@ using EntityLayer.Concrete.DTOs.CarDTOs;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
 using EntityLayer.Concrete.DTOs.DoorDTOs;
 using EntityLayer.Concrete.DTOs.FuelDTOs;
+using EntityLayer.Concrete.DTOs.TestomonialDTOs;
 using EntityLayer.Concrete.DTOs.TransmissionDTOs;
 using EntityLayer.Concrete.TableModels;
 
@@ -72,7 +74,20 @@ namespace BusinessLayer.Mapper
             CreateMap<BookingReadDto,Booking>().ReverseMap();
             CreateMap<BookingReadActiveDto,Booking>().ReverseMap();
             CreateMap<BookingUpdateDto,Booking>().ReverseMap(); 
-            CreateMap<BookingConfirmationDto,Booking>().ReverseMap(); 
+            CreateMap<BookingConfirmationDto,Booking>().ReverseMap();
+            #endregion
+
+            #region About
+             CreateMap<AboutCreateDto,About>().ReverseMap();
+             CreateMap<AboutUpdateDto,About>().ReverseMap();
+             CreateMap<AboutReadDto,About>().ReverseMap();
+            #endregion
+
+            #region Testomonial
+            CreateMap<TestomonialCreateDto,Testomonial>().ReverseMap();
+            CreateMap<TestomonialReadDto,Testomonial>().ReverseMap();
+            CreateMap<TestomonialReadActiveDto,Testomonial>().ReverseMap();
+            CreateMap<TestomonialUpdateDto,Testomonial>().ReverseMap();
             #endregion
 
 
