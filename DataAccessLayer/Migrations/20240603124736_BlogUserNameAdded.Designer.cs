@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240601093355_bookinglocation_added_mig3")]
-    partial class bookinglocation_added_mig3
+    [Migration("20240603124736_BlogUserNameAdded")]
+    partial class BlogUserNameAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,41 @@ namespace DataAccessLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EntityLayer.Concrete.TableModels.About", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Delete")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id", "Delete")
+                        .IsUnique();
+
+                    b.ToTable("Abouts");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Blog", b =>
                 {
                     b.Property<int>("Id")
@@ -32,6 +67,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CommentCounta")
                         .HasColumnType("int");
@@ -59,7 +97,13 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("Id", "Delete")
                         .IsUnique();
@@ -107,9 +151,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CarId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -125,6 +166,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(254)
                         .HasColumnType("nvarchar(254)");
+
+                    b.Property<bool>("IsTaked")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastUpdateDate")
                         .HasColumnType("datetime2");
@@ -159,12 +203,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("CarId1");
-
                     b.HasIndex("Id", "Delete")
                         .IsUnique();
 
-                    b.ToTable("Booking");
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Brand", b =>
@@ -207,13 +249,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("BodyId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BodyId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("BrandId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BrandId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
@@ -223,9 +259,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("DoorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DoorId1")
                         .HasColumnType("int");
 
                     b.Property<short>("Engine")
@@ -242,13 +275,13 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("FuelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FuelId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("InteriorColor")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsRented")
+                        .HasColumnType("bit");
 
                     b.Property<double>("Kilometer")
                         .HasColumnType("float");
@@ -274,9 +307,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("TransmissionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TransmissionId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Year")
                         .HasColumnType("datetime2");
 
@@ -284,23 +314,13 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("BodyId");
 
-                    b.HasIndex("BodyId1");
-
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("BrandId1");
 
                     b.HasIndex("DoorId");
 
-                    b.HasIndex("DoorId1");
-
                     b.HasIndex("FuelId");
 
-                    b.HasIndex("FuelId1");
-
                     b.HasIndex("TransmissionId");
-
-                    b.HasIndex("TransmissionId1");
 
                     b.HasIndex("Id", "Delete")
                         .IsUnique();
@@ -618,6 +638,56 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.TableModels.Testomonial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Delete")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LinkedIn")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhotoPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id", "Delete")
+                        .IsUnique();
+
+                    b.ToTable("Testomonials");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Transmission", b =>
                 {
                     b.Property<int>("Id")
@@ -647,17 +717,20 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Transmissions");
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.TableModels.Blog", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.TableModels.Membership.ApplicationUser", null)
+                        .WithMany("Blogs")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Booking", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.TableModels.Car", "Car")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EntityLayer.Concrete.TableModels.Car", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("CarId1");
 
                     b.Navigation("Car");
                 });
@@ -665,54 +738,34 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Car", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.TableModels.Body", "Body")
-                        .WithMany()
+                        .WithMany("Cars")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.TableModels.Body", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("BodyId1");
-
                     b.HasOne("EntityLayer.Concrete.TableModels.Brand", "Brand")
-                        .WithMany()
+                        .WithMany("Cars")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.TableModels.Brand", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("BrandId1");
-
                     b.HasOne("EntityLayer.Concrete.TableModels.Door", "Door")
-                        .WithMany()
+                        .WithMany("Cars")
                         .HasForeignKey("DoorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.TableModels.Door", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("DoorId1");
-
                     b.HasOne("EntityLayer.Concrete.TableModels.Fuel", "Fuel")
-                        .WithMany()
+                        .WithMany("Cars")
                         .HasForeignKey("FuelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.TableModels.Fuel", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("FuelId1");
-
                     b.HasOne("EntityLayer.Concrete.TableModels.Transmission", "Transmission")
-                        .WithMany()
+                        .WithMany("Cars")
                         .HasForeignKey("TransmissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EntityLayer.Concrete.TableModels.Transmission", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("TransmissionId1");
 
                     b.Navigation("Body");
 
@@ -815,6 +868,11 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Fuel", b =>
                 {
                     b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.TableModels.Membership.ApplicationUser", b =>
+                {
+                    b.Navigation("Blogs");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Transmission", b =>

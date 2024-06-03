@@ -40,29 +40,28 @@ namespace DataAccessLayer.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            // Configure relationships
             builder.HasOne(c => c.Brand)
-                .WithMany()
+                .WithMany(c=>c.Cars)
                 .HasForeignKey(c => c.BrandId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(c => c.Body)
-                .WithMany()
+                .WithMany(c => c.Cars)
                 .HasForeignKey(c => c.BodyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(c => c.Door)
-                .WithMany()
+               .WithMany(c => c.Cars)
                 .HasForeignKey(c => c.DoorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(c => c.Fuel)
-                .WithMany()
+               .WithMany(c => c.Cars)
                 .HasForeignKey(c => c.FuelId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(c => c.Transmission)
-                .WithMany()
+                .WithMany(c => c.Cars)
                 .HasForeignKey(c => c.TransmissionId)
                 .OnDelete(DeleteBehavior.Cascade);
 

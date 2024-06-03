@@ -6,5 +6,7 @@ namespace EntityLayer.Concrete.TableModels.Membership
     {
         public string Name { get; set; }
         public string Surname { get; set; }
+
+        public ICollection<Blog> Blogs { get; set; }
     }
 }

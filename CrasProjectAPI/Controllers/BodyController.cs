@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CrasProjectAPI.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    //[Authorize(Roles ="Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BodyController : ControllerBase

@@ -12,6 +12,23 @@ namespace DataAccessLayer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Abouts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Delete = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Abouts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -135,6 +152,26 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fuels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Testomonials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    PhotoPath = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    LinkedIn = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Delete = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Testomonials", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -300,16 +337,12 @@ namespace DataAccessLayer.Migrations
                     ExteriorColor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     InteriorColor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhotoPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsRented = table.Column<bool>(type: "bit", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     BodyId = table.Column<int>(type: "int", nullable: false),
                     DoorId = table.Column<int>(type: "int", nullable: false),
                     FuelId = table.Column<int>(type: "int", nullable: false),
                     TransmissionId = table.Column<int>(type: "int", nullable: false),
-                    BodyId1 = table.Column<int>(type: "int", nullable: true),
-                    BrandId1 = table.Column<int>(type: "int", nullable: true),
-                    DoorId1 = table.Column<int>(type: "int", nullable: true),
-                    FuelId1 = table.Column<int>(type: "int", nullable: true),
-                    TransmissionId1 = table.Column<int>(type: "int", nullable: true),
                     Delete = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -324,21 +357,11 @@ namespace DataAccessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cars_Bodys_BodyId1",
-                        column: x => x.BodyId1,
-                        principalTable: "Bodys",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Cars_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cars_Brands_BrandId1",
-                        column: x => x.BrandId1,
-                        principalTable: "Brands",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Cars_Doors_DoorId",
                         column: x => x.DoorId,
@@ -346,33 +369,55 @@ namespace DataAccessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cars_Doors_DoorId1",
-                        column: x => x.DoorId1,
-                        principalTable: "Doors",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Cars_Fuels_FuelId",
                         column: x => x.FuelId,
                         principalTable: "Fuels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cars_Fuels_FuelId1",
-                        column: x => x.FuelId1,
-                        principalTable: "Fuels",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Cars_Transmissions_TransmissionId",
                         column: x => x.TransmissionId,
                         principalTable: "Transmissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cars_Transmissions_TransmissionId1",
-                        column: x => x.TransmissionId1,
-                        principalTable: "Transmissions",
-                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Request = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsTaked = table.Column<bool>(type: "bit", nullable: false),
+                    PickUpDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PickUpLocation = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false),
+                    Destination = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    Delete = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Cars_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Cars",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Abouts_Id_Delete",
+                table: "Abouts",
+                columns: new[] { "Id", "Delete" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -426,6 +471,17 @@ namespace DataAccessLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bookings_CarId",
+                table: "Bookings",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_Id_Delete",
+                table: "Bookings",
+                columns: new[] { "Id", "Delete" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Brands_Id_Delete",
                 table: "Brands",
                 columns: new[] { "Id", "Delete" },
@@ -437,19 +493,9 @@ namespace DataAccessLayer.Migrations
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_BodyId1",
-                table: "Cars",
-                column: "BodyId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cars_BrandId",
                 table: "Cars",
                 column: "BrandId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cars_BrandId1",
-                table: "Cars",
-                column: "BrandId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cars_DoorId",
@@ -457,19 +503,9 @@ namespace DataAccessLayer.Migrations
                 column: "DoorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_DoorId1",
-                table: "Cars",
-                column: "DoorId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cars_FuelId",
                 table: "Cars",
                 column: "FuelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cars_FuelId1",
-                table: "Cars",
-                column: "FuelId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cars_Id_Delete",
@@ -481,11 +517,6 @@ namespace DataAccessLayer.Migrations
                 name: "IX_Cars_TransmissionId",
                 table: "Cars",
                 column: "TransmissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cars_TransmissionId1",
-                table: "Cars",
-                column: "TransmissionId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_BlogId",
@@ -511,6 +542,12 @@ namespace DataAccessLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Testomonials_Id_Delete",
+                table: "Testomonials",
+                columns: new[] { "Id", "Delete" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transmissions_Id_Delete",
                 table: "Transmissions",
                 columns: new[] { "Id", "Delete" },
@@ -520,6 +557,9 @@ namespace DataAccessLayer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Abouts");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -536,16 +576,25 @@ namespace DataAccessLayer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cars");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Testomonials");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Cars");
+
+            migrationBuilder.DropTable(
+                name: "Blogs");
 
             migrationBuilder.DropTable(
                 name: "Bodys");
@@ -561,9 +610,6 @@ namespace DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Transmissions");
-
-            migrationBuilder.DropTable(
-                name: "Blogs");
         }
     }
 }

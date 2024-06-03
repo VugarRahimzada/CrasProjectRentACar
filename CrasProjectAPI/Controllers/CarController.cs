@@ -16,7 +16,7 @@ namespace CrasProjectAPI.Controllers
             _carService = carService;
         }
 
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
 
         [HttpGet("Active")]
         public IActionResult GetAllActive()

@@ -40,7 +40,7 @@ namespace DataAccessLayer.Configurations
                 .IsRequired();
 
             builder.HasOne(x => x.Car)
-                .WithMany()
+                .WithMany(x=>x.Bookings)
                 .HasForeignKey(c => c.CarId)
                 .OnDelete(DeleteBehavior.Cascade);
 
