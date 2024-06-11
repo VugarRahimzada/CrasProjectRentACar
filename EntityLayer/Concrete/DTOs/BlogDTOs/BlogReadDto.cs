@@ -9,7 +9,6 @@ namespace EntityLayer.Concrete.DTOs.BlogDTOs
         public int CommentCounta { get; set; } = 0;
         public string PhotoPath { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
-        public int ApplicationUserId { get; set; }
         public List<CommentReadDto> Comments { get; set; }
         public int Delete { get; set; } = 0;
     }

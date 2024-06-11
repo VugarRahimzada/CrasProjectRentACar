@@ -73,6 +73,7 @@ namespace CrasProjectAPI
 
             // Register services and validators
             builder.Services.AddScoped<AccountManager>();
+            builder.Services.AddScoped<ApplicationUser>();
             builder.Services.AddScoped<IBlogService, BlogManager>();
             builder.Services.AddScoped<IBlogDal, BlogDal>();
 

@@ -1,6 +1,10 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using EntityLayer.Concrete.TableModels.Membership;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace CrasProjectAPI.Controllers
 {
@@ -10,9 +14,11 @@ namespace CrasProjectAPI.Controllers
     {
         private readonly IBlogService _blogService;
 
+
         public BlogController(IBlogService blogService)
         {
             _blogService = blogService;
+
         }
 
         [HttpGet("Active")]
@@ -35,10 +41,10 @@ namespace CrasProjectAPI.Controllers
             var result = _blogService.Add(blog);
             return Ok(result);
         }
+
         [HttpPut]
         public IActionResult Update([FromForm] BlogUpdateDto blog)
         {
-            
             var result = _blogService.Update(blog);
             return Ok(result);
         }
@@ -49,12 +55,12 @@ namespace CrasProjectAPI.Controllers
             var result = _blogService.HardDelete(id);
             return Ok(result);
         }
+
         [HttpPut("SoftDelete")]
         public IActionResult Delete(int ID)
         {
             var result = _blogService.Delete(ID);
             return Ok(result);
         }
-
     }
 }

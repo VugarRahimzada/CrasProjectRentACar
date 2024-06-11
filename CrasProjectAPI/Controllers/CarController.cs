@@ -31,6 +31,12 @@ namespace CrasProjectAPI.Controllers
             var result = _carService.GetAll();
             return Ok(result);
         }
+        [HttpGet("AllTakeable")]
+        public IActionResult GetAllTakeable()
+        {
+            var result = _carService.GetAllTakeable();
+            return Ok(result);
+        }
 
         [HttpPost]
         public IActionResult Create([FromForm] CarCreateDTO car)

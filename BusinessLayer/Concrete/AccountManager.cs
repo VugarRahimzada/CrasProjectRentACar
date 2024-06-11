@@ -80,9 +80,32 @@ namespace CrasProjectAPI.Services
         {
             return await _userManager.AddToRoleAsync(user, role);
         }
+
         public async Task<ApplicationUser?> FindUserByIdAsync(int userId)
         {
             return await _userManager.FindByIdAsync(userId.ToString());
+        }
+        public async Task<IdentityResult> DeleteRoleAsync(string role)
+        {
+            var applicationRole = await _roleManager.FindByNameAsync(role);
+            if (applicationRole != null)
+            {
+                return await _roleManager.DeleteAsync(applicationRole);
+            }
+
+            return IdentityResult.Failed(new IdentityError { Description = $"Role {role} not found" });
+        }
+
+        public async Task<IdentityResult> UpdateRoleAsync(string currentRole, string newRole)
+        {
+            var applicationRole = await _roleManager.FindByNameAsync(currentRole);
+            if (applicationRole != null)
+            {
+                applicationRole.Name = newRole;
+                return await _roleManager.UpdateAsync(applicationRole);
+            }
+
+            return IdentityResult.Failed(new IdentityError { Description = $"Role {currentRole} not found" });
         }
     }
 }

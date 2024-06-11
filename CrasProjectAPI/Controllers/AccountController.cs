@@ -109,5 +109,40 @@ namespace CrasProjectAPI.Controllers
             }
             return BadRequest(new { message = "Failed to assign role", errors = result.Errors });
         }
+
+
+        [HttpDelete("delete-role/{role}")]
+        public async Task<IActionResult> DeleteRole(string role)
+        {
+            if (!await _accountManager.RoleExistsAsync(role))
+            {
+                return BadRequest(new { message = "Role does not exist" });
+            }
+
+            var result = await _accountManager.DeleteRoleAsync(role);
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Role deleted successfully" });
+            }
+
+            return BadRequest(new { message = "Failed to delete role", errors = result.Errors });
+        }
+
+         [HttpPut("update-role")]
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleDto model)
+        {
+            if (!await _accountManager.RoleExistsAsync(model.Name))
+            {
+                return BadRequest(new { message = "Current role does not exist" });
+            }
+
+            var result = await _accountManager.UpdateRoleAsync(model.Name, model.NewRole);
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Role updated successfully" });
+            }
+
+            return BadRequest(new { message = "Failed to update role", errors = result.Errors });
+        }
     }
 }

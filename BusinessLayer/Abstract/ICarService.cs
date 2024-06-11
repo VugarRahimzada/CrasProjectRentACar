@@ -10,6 +10,7 @@ namespace BusinessLayer.Abstract
         IResult Delete(int id);
         IResult HardDelete(int id);
         IDataResult<List<CarReadDto>> GetAll();
+        IDataResult<List<CarReadActivDto>> GetAllTakeable();
         IDataResult<List<CarReadActivDto>> GetAllActive();
         IDataResult<CarReadDto> GetById(int id);
     }

@@ -10,7 +10,7 @@ namespace DataAccessLayer.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=VR; Database=CrasRentacACarApiDb; Integrated Security=True; Trusted_Connection=True;Encrypt=false;");
+            optionsBuilder.UseSqlServer(@"Server=VR; Database=CrasRentacACarDB; Integrated Security=True; Trusted_Connection=True;Encrypt=false;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

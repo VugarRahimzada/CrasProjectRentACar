@@ -65,8 +65,9 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CommentCounta")
                         .HasColumnType("int");
@@ -94,13 +95,7 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("Id", "Delete")
                         .IsUnique();
@@ -714,13 +709,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Transmissions");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.TableModels.Blog", b =>
-                {
-                    b.HasOne("EntityLayer.Concrete.TableModels.Membership.ApplicationUser", null)
-                        .WithMany("Blogs")
-                        .HasForeignKey("ApplicationUserId");
-                });
-
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Booking", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.TableModels.Car", "Car")
@@ -865,11 +853,6 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Fuel", b =>
                 {
                     b.Navigation("Cars");
-                });
-
-            modelBuilder.Entity("EntityLayer.Concrete.TableModels.Membership.ApplicationUser", b =>
-                {
-                    b.Navigation("Blogs");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.TableModels.Transmission", b =>

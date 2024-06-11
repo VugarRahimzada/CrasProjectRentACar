@@ -137,5 +137,16 @@ namespace BusinessLayer.Concrete
             return new SuccessDataResult<CarReadDto>(cardto, HttpStatusCode.OK, Messages.DATA_SUCCESFULLY_RETRIEVED);
         }
 
+        public IDataResult<List<CarReadActivDto>> GetAllTakeable()
+        {
+            var car = _carDal.GetAllWithPart(x => x.IsRented == false);
+            var cardto = _mapper.Map<List<CarReadActivDto>>(car);
+
+            if (cardto == null || cardto.Count == 0)
+            {
+                return new ErrorDataResult<List<CarReadActivDto>>(cardto, HttpStatusCode.NotFound, Messages.NOT_FOUND);
+            }
+            return new SuccessDataResult<List<CarReadActivDto>>(cardto, HttpStatusCode.OK, Messages.DATA_SUCCESFULLY_RETRIEVED);
+        }
     }
 }

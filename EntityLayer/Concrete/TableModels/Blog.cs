@@ -14,8 +14,8 @@ namespace EntityLayer.Concrete.TableModels
         public string Title { get; set; }
         public string Content { get; set; }
         public int CommentCounta { get; set; } = 0;
+        public string Author {  get; set; }
         public string PhotoPath { get; set; }
-        public string UserName { get; set; }
         public ICollection<Comment> Comments { get; set; }
     }
 }

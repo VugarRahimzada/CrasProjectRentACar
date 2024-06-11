@@ -10,9 +10,11 @@ using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
 using EntityLayer.Concrete.TableModels;
+using EntityLayer.Concrete.TableModels.Membership;
 using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using IResult = CoreLayer.Results.Abstract.IResult;
@@ -29,7 +31,7 @@ namespace BusinessLayer.Concrete
         public BlogManager(IBlogDal blogdal, IMapper mapper, IWebHostEnvironment webHostEnvironment, IValidator<Blog> blogValidator)
         {
             _blogdal = blogdal;
-            _mapper = mapper;
+            _mapper = mapper; 
             _webHostEnvironment = webHostEnvironment;
             _blogValidator = blogValidator;
         }
@@ -39,6 +41,7 @@ namespace BusinessLayer.Concrete
 
             var blog = _mapper.Map<Blog>(entity);
             var validationResult = ValidationTool.Validate<Blog>(blog, _blogValidator);
+             
             if (validationResult != null)
             {
                 return validationResult;
