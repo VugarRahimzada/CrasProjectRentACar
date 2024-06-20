@@ -1,11 +1,13 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete.DTOs.FuelDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrasProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FuelController : ControllerBase
     {
         private readonly IFuelService _fuelService;

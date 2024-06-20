@@ -8,6 +8,7 @@ namespace CrasProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TestomonialController : ControllerBase
     {
         private readonly ITestomonialService _testomonialService;

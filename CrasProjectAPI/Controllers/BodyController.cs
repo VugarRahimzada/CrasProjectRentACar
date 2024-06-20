@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CrasProjectAPI.Controllers
 {
-    //[Authorize(Roles ="Admin")]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BodyController : ControllerBase
     {
         private readonly IBodyService _bodyService;

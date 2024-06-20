@@ -1,10 +1,6 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete.DTOs.BlogDTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using EntityLayer.Concrete.TableModels.Membership;
-using System.Threading.Tasks;
-using System.Security.Claims;
 
 namespace CrasProjectAPI.Controllers
 {

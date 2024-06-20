@@ -1,11 +1,13 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete.DTOs.BrandDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrasProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BrandController : ControllerBase
     {
         private readonly IBrandService _brandService;

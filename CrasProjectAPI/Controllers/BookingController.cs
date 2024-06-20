@@ -1,12 +1,13 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete.DTOs.BookingDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace CrasProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;

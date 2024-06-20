@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using CrasProjectAPI.Services;
 using EntityLayer.Concrete.TableModels.Membership;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CrasProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class AccountController : ControllerBase
     {
         private readonly AccountManager _accountManager;
@@ -143,6 +145,13 @@ namespace CrasProjectAPI.Controllers
             }
 
             return BadRequest(new { message = "Failed to update role", errors = result.Errors });
+        }
+
+        [HttpGet("roles")]
+        public async Task<IActionResult> GetAllRole()
+        {
+            var roles = await _accountManager.GetAllRolesAsync();
+            return Ok(roles);
         }
     }
 }

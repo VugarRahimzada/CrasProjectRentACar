@@ -2,6 +2,7 @@
 using EntityLayer.Concrete.DTOs.MembershipDTOs;
 using EntityLayer.Concrete.TableModels.Membership;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -106,6 +107,10 @@ namespace CrasProjectAPI.Services
             }
 
             return IdentityResult.Failed(new IdentityError { Description = $"Role {currentRole} not found" });
+        }
+        public async Task<List<string>> GetAllRolesAsync()
+        {
+            return await _roleManager.Roles.Select(r => r.Name).ToListAsync();
         }
     }
 }

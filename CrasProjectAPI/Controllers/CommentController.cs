@@ -2,12 +2,14 @@
 using BusinessLayer.Validation.FluentValidation;
 using CoreLayer.Results.Concrete;
 using EntityLayer.Concrete.DTOs.CommentDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrasProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
